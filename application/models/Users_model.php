@@ -4,6 +4,7 @@ class Users_model extends CI_Model{
     
     private $userID;
     private $userName;
+    private $userEmail;
     private $otpKey;
     private $otpCode;
     private $otpExpired;
@@ -13,11 +14,22 @@ class Users_model extends CI_Model{
     }
     
     public function hasUserName($username){
-        $query=$this->db->select('*')->from('OTP_Users')->where('OTP_Username',$username)->get();
-        if($query->num_rows()==1){
+        $query=$this->db->select('*')->from('otp_users')
+                                     ->join('otp_emails','otp_users.OTP_UID=otp_emails.OTP_UID')
+                                     ->where('OTP_Username',$username)->get();
+        if(($num_row=$query->num_rows())>=1){
             $result=$query->result();
             $this->setUserID($result[0]->OTP_UID);
             $this->setUserName($result[0]->OTP_Username);
+            
+            // Setting user emails
+            $emails=array();
+            for($i=0;$i<$num_row;$i++){
+                $emails[$i]=$result[$i]->OTP_Emails;
+            }
+            
+            $this->setUserEmail($emails);
+            
             $this->setOtpKey($result[0]->OTP_Key);
             $this->setOtpCode($result[0]->OTP_Code);
             $this->setOtpExpired($result[0]->OTP_Expired);
@@ -34,6 +46,10 @@ class Users_model extends CI_Model{
     
     public function setUserName($userName){
         $this->userName=$userName;
+    }
+    
+     public function setUserEmail($userEmail){
+        $this->userEmail=$userEmail;
     }
     
     public function setOtpKey($otpKey){
@@ -54,6 +70,10 @@ class Users_model extends CI_Model{
     
     public function getUserName(){
         return $this->userName;
+    }
+    
+    public function getUserEmail(){
+        return $this->userEmail;
     }
     
     public function getOtpKey(){
@@ -78,6 +98,7 @@ class Users_model extends CI_Model{
             'OTP_Code'=>$this->otpCode,
             'OTP_Expired'=>$this->otpExpired     
         );
+        
         $this->db->where('OTP_UID',$this->userID);
         $this->db->update('otp_users',$otpUsersData);
         
