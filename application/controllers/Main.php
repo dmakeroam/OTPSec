@@ -4,6 +4,7 @@ class Main extends CI_Controller{
     
     public function __construct(){
         parent::__construct();
+        $this->load->helper('form');
         $this->load->helper('html');
         $this->load->helper('url');
         $this->load->library('session');
@@ -18,9 +19,9 @@ class Main extends CI_Controller{
         }
     }
     
-    private function loadView($viewPath){
+    private function loadView($viewPath,$arg=null){
         $this->load->view('template/header');
-        $this->load->view($viewPath);
+        $this->load->view($viewPath,$arg);
         $this->load->view('template/footer');
     }
     

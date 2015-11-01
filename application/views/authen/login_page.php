@@ -1,8 +1,14 @@
+<?php
+if ( ! defined('BASEPATH')) exit('No direct script access allowed');
+?>
 <div class="container">
   <div class="row">
     <div class="Absolute-Center is-Responsive">
       <div class="col-sm-12 col-md-10 col-md-offset-1">
-        <form action="" id="loginForm" method="post">
+        <?php if(isset($error)):?>
+        <p style='text-align:center; color:red;'><?=$error?></p>
+        <?php endif;?>
+         <?=form_open('authen/login')?>
           <div class="form-group input-group">
             <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
             <input class="form-control" type="text" name='username' placeholder="Username" required="true"/>          
@@ -10,7 +16,7 @@
           <div class="form-group">
             <button type="submit" class="btn btn-def btn-block">Login</button>
           </div>
-        </form>        
+         <?=form_close()?>    
       </div>  
     </div>    
   </div>
