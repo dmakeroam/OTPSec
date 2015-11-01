@@ -68,5 +68,28 @@ class Users_model extends CI_Model{
         return $this->otpExpired;
     }
     
+    public function save(){
+        
+        $this->db->trans_begin();
+        
+        $otpUsersData=array(
+            'OTP_Username'=>$this->userName,
+            'OTP_Key'=>$this->otpKey,
+            'OTP_Code'=>$this->otpCode,
+            'OTP_Expired'=>$this->otpExpired     
+        );
+        $this->db->where('OTP_UID',$this->userID);
+        $this->db->update('otp_users',$otpUsersData);
+        
+        if ($this->db->trans_status() === FALSE){
+            $this->db->trans_rollback();
+            return false;
+        }
+        else{
+            $this->db->trans_commit();
+            return true;
+        }
+        
+    }
     
 }

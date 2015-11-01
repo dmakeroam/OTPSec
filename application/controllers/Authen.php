@@ -13,8 +13,13 @@ class Authen extends CI_Controller{
     public function login(){
         if(($username=$this->input->post('username'))){
              if($this->Users_model->hasUserName($username)){
-                 $this->generateOTPCode();
-                 $this->loadView('authen/login_page');
+                 if(!($this->generateOTPCode())){
+                    $error=array('error'=>'The system could not generate an OTP code.');
+                    $this->loadView('authen/login_page',$error); 
+                 }
+                 else{
+                   $this->loadView('authen/otp_input');
+                 }
              }
              else{
                  $error=array('error'=>'The username is not exist.');
@@ -34,11 +39,18 @@ class Authen extends CI_Controller{
          for($i=1;$i<$otpKey_length;$i++){
              $secret_key.=chr(rand(33,126));
          }
-         $otpCode=hash('sha256',($otpKey.$secret_key));
+         $otpCode=hash('sha256',(time().$otpKey.$secret_key));
          $this->Users_model->setOtpCode($otpCode);
-         $current_timestamp = new DateTime();
-         $current_timestamp->modify('+30 minutes');    
-         echo $current_timestamp->format('Y-m-d h:i:s');
+         $current_timestamp_obj = new DateTime();
+         $current_timestamp_obj->modify('+30 minutes');    
+         $current_timestamp=$current_timestamp_obj->format('Y-m-d h:i:s');
+         $this->Users_model->setOtpExpired($current_timestamp);
+         if($this->Users_model->save()){
+             return true;
+         }
+         else{
+             return false;
+         }
      }
     
      private function loadView($viewPath,$arg=null){
