@@ -11,11 +11,17 @@ class Main extends CI_Controller{
     
     public function index(){
         if(($username=$this->session->userdata('username'))){
-            $this->load->view('main/main_page',array('username'=>$username));
+            $this->loadView('main/main_page',array('username'=>$username));
         }
         else{
-            $this->load->view('authen/login_page');
+            $this->loadView('authen/login_page');
         }
+    }
+    
+    private function loadView($viewPath){
+        $this->load->view('template/header');
+        $this->load->view($viewPath);
+        $this->load->view('template/footer');
     }
     
 }
