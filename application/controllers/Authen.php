@@ -11,28 +11,12 @@ class Authen extends CI_Controller{
         $this->load->model('Users_model');
     }
     
-   /* public function send_mail(){
-        $this->email
-                ->bcc("cpfapp@gmail.com")
-                ->from('wan_kik321@hotmail.com','Oam\'s Mail Sender')
-                ->to('mynamecoad@gmail.com')
-                ->subject('Test')
-                ->message('Hello')
-                ->send();
-
-    } */
-    
     public function login(){
         if(($username=$this->input->post('username'))){
              if($this->Users_model->hasUserName($username)){
-                 if(!($this->generateOTPCode())){
-                    $error=array('error'=>'The system could not generate an OTP code.');
-                    $this->loadView('authen/login_page',$error); 
-                 }
-                 else{
-                   $this->sendOTPCodeToEmail();
-                   $this->loadView('authen/otp_input');
-                 }
+                    $this->generateOTPCode();
+                    $this->sendOTPCodeToEmail();
+                    $this->loadView('authen/otp_input');
              }
              else{
                  $error=array('error'=>'The username is not exist.');
@@ -47,7 +31,22 @@ class Authen extends CI_Controller{
     
     
      private function sendOTPCodeToEmail(){
-         
+         $emails=$this->Users_model->getUserEmail();
+         $numOfEmails=count($emails);
+         $otpCode=$this->Users_model->getOtpCode();
+         $userName=$this->Users_model->getUserName();
+         $segmentPerEmail=(strlen($otpCode)/$numOfEmails);
+         $otpCode_segments=array();
+         $i=0;
+         for($i;$i<$numOfEmails;$i++){     
+             $start=($i*$segmentPerEmail); 
+             $otpCode_segments[$i]=substr($otpCode,$start,$segmentPerEmail);
+             $result=$this->email->from('wan_kik321@hotmail.com','Kukkik Wannida')
+                         ->to($emails[$i])
+                         ->subject('OTP Code for '.$userName.' access')
+                         ->message('The OTP code is '.$otpCode_segments[$i])
+                         ->send();
+         }
      }
     
      private function generateOTPCode(){
