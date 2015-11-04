@@ -5,5 +5,6 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 </script>
 <script src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/js/bootstrap.min.js' type='text/javascript'>
 </script>
+<?=script_tag('assets/js/bootstrap/bootstrap-progressbar.min.js')?>
 </body>
 </html>
