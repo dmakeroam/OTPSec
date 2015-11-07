@@ -5,6 +5,7 @@
     #Additionally this will allow you to create a System.php controller,
     #previously this would not have been possible.
     #'system' can be replaced if you have renamed your system folder.
+    
     RewriteCond %{REQUEST_URI} ^system.*
     RewriteRule ^(.*)$ index.php?/$1 [L]
 
@@ -12,6 +13,7 @@
     #This snippet prevents user access to the application folder
     #Submitted by: Fabdrol
     #Rename 'application' to your applications folder name.
+    
     RewriteCond %{REQUEST_URI} ^application.*
     RewriteRule ^(.*)$ index.php?/$1 [L]
 
@@ -19,10 +21,19 @@
     #such as an image or css document, if this isn't true it sends the
     #request to index.php
     #RewriteCond %{ENV:REDIRECT_STATUS} ^$
+    
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^(.*)$ index.php?/$1 [L]
 
+    RewriteCond %{REQUEST_METHOD} ^(TRACE|TRACK)
+    RewriteRule .* - [F]
+    
+    # BLOCK BAD QUERY STRINGS
+    RewriteCond %{QUERY_STRING} ftp\:   [NC,OR]
+    RewriteCond %{QUERY_STRING} http\:  [NC,OR]
+    RewriteCond %{QUERY_STRING} https\: [NC]
+    RewriteRule .* -                    [F,L]
 
     </IfModule>
 
@@ -40,6 +51,16 @@
   Header set X-Content-Type-Options nosniff
   #Header edit Set-Cookie ^(.*)$ $1;HttpOnly;Secure
 </IfModule>
+
+# secure htaccess file
+<Files .htaccess>
+ order allow,deny
+ deny from all
+</Files>
+
+# secure directory by disabling script execution
+AddHandler cgi-script .pl .py .jsp .jspx .jsf .asp .aspx .sh .cgi .bat .exe .o
+Options -ExecCGI
 
 php_flag session.use_only_cookies on
 php_flag session.use_trans_sid off
