@@ -6,7 +6,10 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 <head>
 <title>OTPSec Authentication</title>
 <meta charset="utf-8"/>
-<link rel='stylesheet' type='text/css' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css'>
+<?=link_tag('https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.5/css/bootstrap.min.css')?>
+<?php if(isset($page) && $page==='login') :?>
+<?=link_tag('assets/css/sweetalert2/sweetalert2.css')?>
+<?php endif;?>
 <?=link_tag('assets/css/main/style.css')?>
 </head>
 <body>

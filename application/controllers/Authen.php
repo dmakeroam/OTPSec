@@ -7,6 +7,7 @@ class Authen extends CI_Controller{
         $this->load->helper('form');
         $this->load->helper('html');
         $this->load->library('email');
+        $this->load->library('session');
         $this->load->helper('url');
         $this->load->model('Users_model');
     }
@@ -15,22 +16,29 @@ class Authen extends CI_Controller{
         if(($username=$this->input->post('username'))){
              if($this->Users_model->hasUserName($username)){
                     $this->generateOTPCode();
-                    $this->sendOTPCodeToEmail();
-                    $this->loadView('authen/otp_input');
+                    if($this->generateOTPCodeSegments()){
+                        $this->session->set_userdata('hasOTPSent',true);
+                        echo "OK";
+                    }
+                    else{
+                        echo "NOK";
+                    }
              }
              else{
+                 $page=array('page'=>'login');
                  $error=array('error'=>'The username is not exist.');
-                 $this->loadView('authen/login_page',$error);
+                 $this->loadView('authen/login_page',$error,$page,$page);
              }
         }
         else{
-             $this->loadView('authen/login_page');
+             $page=array('page'=>'login');
+             $this->loadView('authen/login_page',null,$page,$page);
              return;
         }
     }
     
     
-     private function sendOTPCodeToEmail(){
+     private function generateOTPCodeSegments(){
          $emails=$this->Users_model->getUserEmail();
          $numOfEmails=count($emails);
          $otpCode=$this->Users_model->getOtpCode();
@@ -38,16 +46,29 @@ class Authen extends CI_Controller{
          $segmentPerEmail=(strlen($otpCode)/$numOfEmails);
          $otpCode_segments=array();
          $i=0;
+         $sentCount=0;
          for($i;$i<$numOfEmails;$i++){     
              $start=($i*$segmentPerEmail); 
              $otpCode_segments[$i]=substr($otpCode,$start,$segmentPerEmail);
+             if($i==2){
+                $otpCode_segments[$i].=substr($otpCode,-1); 
+             }
              $result=$this->email->from('wan_kik321@hotmail.com','Kukkik Wannida')
-                         ->to($emails[$i])
-                         ->subject('OTP Code for '.$userName.' access')
-                         ->message('The OTP code is '.$otpCode_segments[$i])
-                         ->send();
+                                ->to($emails[$i])
+                                ->subject('OTP Code for '.$userName.' access')
+                                ->message('The OTP code is '.$otpCode_segments[$i])
+                                ->send();
+            $sentCount++;
+         }
+         if($sentCount==$numOfEmails){
+             return true;
+         }
+         else{
+             return false;
          }
      }
+    
+    
     
      private function generateOTPCode(){
          $otpKey=$this->Users_model->getOtpKey();
@@ -70,9 +91,9 @@ class Authen extends CI_Controller{
          }
      }
     
-     private function loadView($viewPath,$arg=null){
-        $this->load->view('template/header');
+    private function loadView($viewPath,$arg=null,$headerArg=null,$footerArg=null){
+        $this->load->view('template/header',$headerArg);
         $this->load->view($viewPath,$arg);
-        $this->load->view('template/footer');
+        $this->load->view('template/footer',$footerArg);
     }
 }

@@ -11,18 +11,19 @@ class Main extends CI_Controller{
     }
     
     public function index(){
-        if(($username=$this->session->userdata('username'))){
+        if(false/*($username=$this->session->userdata('username'))*/){
             $this->loadView('main/main_page',array('username'=>$username));
         }
         else{
-            $this->loadView('authen/login_page');
+            $page=array('page'=>'login');
+            $this->loadView('authen/login_page',null,$page,$page);
         }
     }
     
-    private function loadView($viewPath,$arg=null){
-        $this->load->view('template/header');
+    private function loadView($viewPath,$arg=null,$headerArg=null,$footerArg=null){
+        $this->load->view('template/header',$headerArg);
         $this->load->view($viewPath,$arg);
-        $this->load->view('template/footer');
+        $this->load->view('template/footer',$footerArg);
     }
     
 }
