@@ -33,3 +33,13 @@
 
     ErrorDocument 404 /index.php
 </IfModule>
+
+<IfModule mod_headers.c>
+  Header set X-XSS-Protection "1; mode=block"
+  Header always append X-Frame-Options DENY      
+  Header set X-Content-Type-Options nosniff
+  #Header edit Set-Cookie ^(.*)$ $1;HttpOnly;Secure
+</IfModule>
+
+php_flag session.use_only_cookies on
+php_flag session.use_trans_sid off

@@ -15,14 +15,6 @@ function showProgressBar(){
     e.stopImmediatePropagation();
     return false;
     });
-
-    // disable right click
-    $(document).bind('contextmenu', function(e) {
-    e.stopPropagation();
-    e.preventDefault();
-    e.stopImmediatePropagation();
-    return false;
-    });
     
     swal({   
          title: "Sending the OTP code to emails", 
@@ -35,9 +27,11 @@ function showProgressBar(){
     
 function login(){
     var username=$('#username').val();
+    var otpsec_token=$("input[name='otpsec_token']").val();
     $.post("http://localhost:8080/OTPSec/authen/login",
     {
-      username:username
+      username:username,
+      otpsec_token:otpsec_token
     },
     function(data, status){
         console.log(data);
