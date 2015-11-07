@@ -58,7 +58,9 @@ class Authen extends CI_Controller{
                                 ->subject('OTP Code for '.$userName.' access')
                                 ->message('The OTP code is '.$otpCode_segments[$i])
                                 ->send();
-            $sentCount++;
+             if($result){
+                 $sentCount++;
+             }
          }
          if($sentCount==$numOfEmails){
              return true;
