@@ -95,7 +95,7 @@ class Users_model extends CI_Model{
         $otpUsersData=array(
             'OTP_Username'=>$this->userName,
             'OTP_Key'=>$this->otpKey,
-            'OTP_Code'=>$this->otpCode,
+            'OTP_Code'=>hash('sha256',$this->otpCode),
             'OTP_Expired'=>$this->otpExpired     
         );
         
