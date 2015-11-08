@@ -3,9 +3,9 @@
 $config['useragent']        = 'PHPMailer';              // Mail engine switcher: 'CodeIgniter' or 'PHPMailer'
 $config['protocol']         = 'smtp';                   // 'mail', 'sendmail', or 'smtp'
 $config['mailpath']         = '/usr/sbin/sendmail';
-$config['smtp_host']        = 'smtp.live.com';
-$config['smtp_user']        = 'wan_kik321@hotmail.com';
-$config['smtp_pass']        = 'apm4158814';
+$config['smtp_host']        = 'mail.onidev.me';
+$config['smtp_user']        = 'admin@mail.onidev.me';
+$config['smtp_pass']        = 'menotaurut12';
 $config['smtp_port']        = 587;
 $config['smtp_timeout']     = 5;                        // (in seconds)
 $config['smtp_crypto']      = 'tls';                    // '' or 'tls' or 'ssl'

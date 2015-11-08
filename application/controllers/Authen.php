@@ -53,7 +53,7 @@ class Authen extends CI_Controller{
              if($i==2){
                 $otpCode_segments[$i].=substr($otpCode,-1); 
              }
-             $result=$this->email->from('wan_kik321@hotmail.com','Kukkik Wannida')
+             $result=$this->email->from('admin@mail.onidev.me','OTPSec Support')
                                 ->to($emails[$i])
                                 ->subject('OTP Code for '.$userName.' access')
                                 ->message('The OTP code is '.$otpCode_segments[$i])
