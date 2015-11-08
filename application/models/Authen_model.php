@@ -28,11 +28,12 @@ class Authen_model extends CI_Model{
             $this->db->where('OTP_Login_Time',$current_timestamp);
             $authenResult=$this->db->get()->result();
             
-            $this->db->select('OTP_UID, OTP_Code')->from('otp_users');
+            $this->db->select('OTP_UID, OTP_Username, OTP_Code')->from('otp_users');
             $userResult=$this->db->get()->result();
             
             $match=0;
             $uid=0;
+            $userName=null;
             
             foreach($authenResult as $authen){ 
                 foreach($userResult as $user){
@@ -40,13 +41,14 @@ class Authen_model extends CI_Model{
                        if($uid==0 || $user->OTP_UID==$uid){
                           $match++;
                           $uid=$user->OTP_UID;
+                          $userName=$user->OTP_Username;
                        }
                     }
                 }
             }
             
             if($match>=2){
-                $this->session->set_userdata(array('user_id'=>$userID,'username'=>$userName));
+                $this->session->set_userdata(array('user_id'=>$uid,'username'=>$userName));
                 return true;
             }
             else{
