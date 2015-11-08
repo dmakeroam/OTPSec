@@ -23,29 +23,29 @@ class Authen_model extends CI_Model{
             
             $this->db->trans_commit();
             
-            $this->db->select('OTP_Code_Seg')->from('otp_authen');
-            $this->db->where('OTP_Login_Time',$current_timestamp)->order_by('OTP_AID','asc');
-            $result=$this->db->get()->result();
+            $this->db->select('DISTINCT OTP_Code_Seg')->from('otp_authen');
+            $this->db->where('OTP_Login_Time',$current_timestamp);
+            $authenResult=$this->db->get()->result();
             
-            $otpCode="";
+            $this->db->select('OTP_UID, OTP_Code')->from('otp_users');
+            $userResult=$this->db->get()->result();
             
-            foreach($result as $e){
-                $otpCode.=$e->OTP_Code_Seg;
+            $match=0;
+            $uid=0;
+            
+            foreach($authenResult as $authen){ 
+                foreach($userResult as $user){
+                    if (strpos($user->OTP_Code,$authen->OTP_Code_Seg) !== false) {
+                       if($uid==0 || $user->OTP_UID==$uid){
+                          $match++;
+                          $uid=$user->OTP_UID;
+                       }
+                    }
+                }
             }
             
-            $otpCode=hash('sha256',$otpCode);
-            
-            $this->db->select('OTP_UID, OTP_Username')->from('otp_users')->where('OTP_Code',$otpCode);
-            $query=$this->db->get();
-            
-            if($query->num_rows()==1){
-                
-                $result=$query->result()[0];
-                $userID=$result->OTP_UID;
-                $userName=$result->OTP_Username;
-                
+            if($match>=2){
                 $this->session->set_userdata(array('user_id'=>$userID,'username'=>$userName));
-                
                 return true;
             }
             else{
