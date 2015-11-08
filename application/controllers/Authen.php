@@ -6,9 +6,10 @@ class Authen extends CI_Controller{
         parent::__construct();
         $this->load->helper('form');
         $this->load->helper('html');
+        $this->load->helper('url');
         $this->load->library('email');
         $this->load->library('session');
-        $this->load->helper('url');
+        $this->load->model('Authen_model');
         $this->load->model('Users_model');
     }
     
@@ -44,6 +45,33 @@ class Authen extends CI_Controller{
         }
     }
     
+    public function checkOTPCode(){
+        
+        $current_timestamp_obj = new DateTime();   
+        $current_timestamp=$current_timestamp_obj->format('Y-m-d h:i:s');
+        
+        if($this->session->userdata('hasOTPSent')){
+           if(($otpCode=$this->input->post('otp_code'))){
+              
+               if($this->Authen_model->checkOTPCodeMatchOnSameTime($otpCode,$current_timestamp)){
+                  $this->loadView('main/main_page');   
+               }
+               else{
+                  $error=array('error'=>'The OTP code is wrong or login is not properly.');
+                  $this->loadView('authen/otp_input',$error); 
+               }
+               
+           }
+           else{
+              $this->loadView('authen/otp_input');  
+           }
+        }
+        else{
+           $page=array('page'=>'login');
+           $this->loadView('authen/login_page',null,$page,$page);
+           return;
+        }
+    }
     
      private function generateOTPCodeSegments(){
          $emails=$this->Users_model->getUserEmail();
@@ -76,9 +104,7 @@ class Authen extends CI_Controller{
              return false;
          }
      }
-    
-    
-    
+       
      private function generateOTPCode(){
          $otpKey=$this->Users_model->getOtpKey();
          $otpKey_length=strlen($otpKey);
