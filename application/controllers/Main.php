@@ -11,8 +11,8 @@ class Main extends CI_Controller{
     }
     
     public function index(){
-        if(false/*($username=$this->session->userdata('username'))*/){
-            $this->loadView('main/main_page',array('username'=>$username));
+        if($username=$this->session->userdata('username')){
+            $this->loadView('main/main_page',array('username'=>$username),array('page'=>'member'));
         }
         else{
             $page=array('page'=>'login');

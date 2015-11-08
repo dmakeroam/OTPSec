@@ -44,7 +44,7 @@ class Authen extends CI_Controller{
         if(($otpCode=$this->input->post('otp_code'))){
               
             if($this->Authen_model->checkOTPCodeMatchOnSameTime($otpCode,$current_timestamp)){
-               $this->loadView('main/main_page');   
+                redirect('main','refresh');
             }
             else{
                 $error=array('error'=>'The OTP code is wrong or login is not properly.');
