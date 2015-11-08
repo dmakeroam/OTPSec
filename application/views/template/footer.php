@@ -34,7 +34,7 @@ function login(){
       otpsec_token:otpsec_token
     },
     function(data, status){
-        console.log(data);
+        $(location).attr('href', 'authen/otp_input');
     });
 }
 </script>

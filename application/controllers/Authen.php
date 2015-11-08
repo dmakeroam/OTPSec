@@ -21,19 +21,26 @@ class Authen extends CI_Controller{
                         echo "OK";
                     }
                     else{
+                        $this->session->set_userdata('hasOTPSent',false);
                         echo "NOK";
                     }
-             }
-             else{
-                 $page=array('page'=>'login');
-                 $error=array('error'=>'The username is not exist.');
-                 $this->loadView('authen/login_page',$error,$page,$page);
              }
         }
         else{
              $page=array('page'=>'login');
              $this->loadView('authen/login_page',null,$page,$page);
              return;
+        }
+    }
+    
+    public function otp_input(){
+        if($this->session->userdata('hasOTPSent')){
+            $this->loadView('authen/otp_input');
+        }
+        else{
+           $page=array('page'=>'login');
+           $this->loadView('authen/login_page',null,$page,$page);
+           return;
         }
     }
     
