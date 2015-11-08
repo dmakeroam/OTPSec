@@ -18,11 +18,9 @@ class Authen extends CI_Controller{
              if($this->Users_model->hasUserName($username)){
                     $this->generateOTPCode();
                     if($this->generateOTPCodeSegments()){
-                        $this->session->set_userdata('hasOTPSent',true);
                         echo "OK";
                     }
                     else{
-                        $this->session->set_userdata('hasOTPSent',false);
                         echo "NOK";
                     }
              }
@@ -35,14 +33,7 @@ class Authen extends CI_Controller{
     }
     
     public function otp_input(){
-        if($this->session->userdata('hasOTPSent')){
-            $this->loadView('authen/otp_input');
-        }
-        else{
-           $page=array('page'=>'login');
-           $this->loadView('authen/login_page',null,$page,$page);
-           return;
-        }
+       $this->loadView('authen/otp_input');
     }
     
     public function checkOTPCode(){
@@ -50,27 +41,23 @@ class Authen extends CI_Controller{
         $current_timestamp_obj = new DateTime();   
         $current_timestamp=$current_timestamp_obj->format('Y-m-d h:i:s');
         
-        if($this->session->userdata('hasOTPSent')){
-           if(($otpCode=$this->input->post('otp_code'))){
+        if(($otpCode=$this->input->post('otp_code'))){
               
-               if($this->Authen_model->checkOTPCodeMatchOnSameTime($otpCode,$current_timestamp)){
-                  $this->loadView('main/main_page');   
-               }
-               else{
-                  $error=array('error'=>'The OTP code is wrong or login is not properly.');
-                  $this->loadView('authen/otp_input',$error); 
-               }
+            if($this->Authen_model->checkOTPCodeMatchOnSameTime($otpCode,$current_timestamp)){
+               $this->loadView('main/main_page');   
+            }
+            else{
+                $error=array('error'=>'The OTP code is wrong or login is not properly.');
+                $this->loadView('authen/otp_input',$error); 
+            }
                
-           }
-           else{
-              $this->loadView('authen/otp_input');  
-           }
         }
         else{
-           $page=array('page'=>'login');
-           $this->loadView('authen/login_page',null,$page,$page);
-           return;
+              
+            $this->loadView('authen/otp_input');  
+            
         }
+        
     }
     
      private function generateOTPCodeSegments(){
