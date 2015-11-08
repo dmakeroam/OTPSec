@@ -28,7 +28,7 @@ function showProgressBar(){
 function login(){
     var username=$('#username').val();
     var otpsec_token=$("input[name='otpsec_token']").val();
-    $.post("http://localhost:8080/OTPSec/authen/login",
+    $.post("/OTPSec/authen/login",
     {
       username:username,
       otpsec_token:otpsec_token
