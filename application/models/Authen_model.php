@@ -23,7 +23,8 @@ class Authen_model extends CI_Model{
             
             $this->db->trans_commit();
             
-            $this->db->select('DISTINCT OTP_Code_Seg')->from('otp_authen');
+            $this->db->distinct();
+            $this->db->select('OTP_Code_Seg')->from('otp_authen');
             $this->db->where('OTP_Login_Time',$current_timestamp);
             $authenResult=$this->db->get()->result();
             
