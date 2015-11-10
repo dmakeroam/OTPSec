@@ -12,7 +12,9 @@ class Main extends CI_Controller{
     
     public function index(){
         if($username=$this->session->userdata('username')){
-            $this->loadView('main/main_page',array('username'=>$username),array('page'=>'member'));
+            $pageUsername=array('page'=>'member','username'=>$username);
+            $page=array('page'=>'member');
+            $this->loadView('main/main_page',null,$pageUsername,$page);
         }
         else{
             $page=array('page'=>'login');
