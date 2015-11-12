@@ -25,7 +25,7 @@ class Authen_model extends CI_Model{
             
             $this->db->distinct();
             $this->db->select('OTP_Code_Seg')->from('otp_authen');
-            $this->db->where('abs(OTP_Login_Time-\''.$current_timestamp.'\')<=15',null,false);
+            $this->db->where('abs(timestampdiff(second,OTP_Login_Time,\''.$current_timestamp.'\'))<=15',null,false);
             $authenResult=$this->db->get()->result();
             
             $this->db->select('OTP_UID, OTP_Username, OTP_Code')->from('otp_users');
