@@ -36,9 +36,9 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
         <div class="col-md-7">
               <div class="form-group">
                 <p class='topicHeader'>Security</p>
-                <label class="control-label col-md-4" for="encKey">Encryption key:</label>
+                <label class="control-label col-md-4" for="uniqKey">Unique key:</label>
                 <div class="col-md-8">
-                <input type="password" class="form-control" id="encKey" name="encKey" placeholder="Encryption key" readonly>
+                <input type="password" class="form-control" id="uniqKey" name="uniqKey" placeholder="Unique Key" readonly>
                 </div>
               </div>
         </div>

@@ -25,7 +25,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
         </nav>
         <?php if(isset($page) && $page==='member') :?>
         <nav class='navbar-brand-right'>
-        Hi, <?=$username?>
+        Hi, <?=$username?>!
         </nav>
         <?php endif;?>
         </div>
