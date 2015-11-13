@@ -13,7 +13,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
          <?=form_open('authen/checkOTPCode',array('id'=>'otp_input_form'))?>
           <div class="form-group input-group">
             <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-            <input class="form-control" type="text" name='otp_code' id="otp_code" placeholder="OTP Code" required="true"/>          
+            <input class="form-control" type="password" name='otp_code' id="otp_code" placeholder="OTP Code" required="true" autocomplete="off"/>          
           </div>
           <div class="form-group">
             <button type="submit" id="next_btn" class="btn btn-def btn-block">Next</button>        

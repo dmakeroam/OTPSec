@@ -14,26 +14,36 @@ class Authen extends CI_Controller{
     }
     
     public function login(){
-        if(($username=$this->input->post('username'))){
-             if($this->Users_model->hasUserName($username)){
-                    $this->generateOTPCode();
-                    if($this->generateOTPCodeSegments()){
-                        echo "OK";
-                    }
-                    else{
-                        echo "NOK";
-                    }
-             }
+        if(!$this->session->userdata('username')){
+            if(($username=$this->input->post('username'))){
+                 if($this->Users_model->hasUserName($username)){
+                        $this->generateOTPCode();
+                        if($this->generateOTPCodeSegments()){
+                            echo "OK";
+                        }
+                        else{
+                            echo "NOK";
+                        }
+                 }
+            }
+            else{
+                 $page=array('page'=>'login');
+                 $this->loadView('authen/login_page',null,$page,$page);
+                 return;
+            }
         }
         else{
-             $page=array('page'=>'login');
-             $this->loadView('authen/login_page',null,$page,$page);
-             return;
+           redirect('main','refresh');
         }
     }
     
     public function otp_input(){
-       $this->loadView('authen/otp_input');
+       if($this->session->userdata('username')){
+            redirect('main','refresh');
+       }
+       else{
+            $this->loadView('authen/otp_input');
+       }
     }
     
     public function checkOTPCode(){

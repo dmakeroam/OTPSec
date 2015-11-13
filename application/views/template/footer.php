@@ -42,29 +42,65 @@ function login(){
 <?php endif;?>
 <?php if(isset($page) && $page=='member') :?>
 <script language="javascript" type="text/javascript">
+var noEmail=4;
 $(function() {
    $('#edit_btn').click(function(event){
        
        $('#username').removeAttr('readonly');
        $('#username').attr('required','true');
        
-       $('#email1').removeAttr('readonly');
-       $('#email1').attr('required','true');
+       $( "input[name^='email']" ).removeAttr('readonly');
+       $( "input[name^='email']" ).attr('required','true');
        
-       $('#email2').removeAttr('readonly');
-       $('#email2').attr('required','true');
-       
-       $('#email3').removeAttr('readonly');
-       $('#email3').attr('required','true');
-       
-       $('#encKey').removeAttr('readonly');
-       $('#encKey').attr('required','true');
+       $('#uniqKey').removeAttr('readonly');
+       $('#uniqKey').attr('required','true');
        
        $('#edit_btn').addClass('disabled');
        $('#save_btn').removeClass('disabled');
        
    });
+    
+   
 });
+    
+ function addEmails(){
+     if(noEmail!=6){
+          var inputEmail='<div class="form-group" id="email'+noEmail+'-form">';
+          inputEmail+='<label class="control-label col-md-4" for="email'+noEmail+'" id="label-email'+noEmail+'">'+noEmail+'th Email:</label>';
+          inputEmail+='<div class="col-md-8">';
+          inputEmail+='<div class="input-group">';
+          inputEmail+='<input type="email" class="form-control" id="email'+noEmail+'" name="email'+noEmail+'" placeholder="'+noEmail+'th Email" readonly>';
+          inputEmail+='<span class="input-group-btn">';
+          inputEmail+='<button class="btn btn-default addBtn" type="button" onclick="addEmails()"><span class="fui-plus"></span></button>';
+          inputEmail+='<button class="btn btn-default" type="button" onclick="deleteEmails('+noEmail+')" id="delete-email'+noEmail+'"><span class="fui-cross"></span></button>'
+          inputEmail+='</span>';
+          inputEmail+='</div>';
+          inputEmail+='</div>';
+          inputEmail+='</div>';
+          $('#personalInfo').append(inputEmail);
+          if(noEmail==5){
+            $('button').remove('.addBtn');
+          }
+          noEmail++;
+     }
+  }
+function deleteEmails(noOfEmail){
+    $('div').remove('#email'+noOfEmail+'-form');
+    if(noEmail==6 && noOfEmail==4){
+      $('#email5-form').attr('id','email4-form');
+      $('#label-email5').attr('for','email4');
+      $('#label-email5').html('4th Email:');
+      $('#label-email5').attr('id','label-email4');
+      $('#email5').attr('placeholder','4th Email');
+      $('#email5').attr('id','email4');
+      $('#delete-email5').attr('onclick','deleteEmails(4)');
+      $('#delete-email5').attr('id','delete-email4');
+    }
+    noEmail--;
+    if(noEmail==5){
+        $('.input-group-btn').prepend('<button class="btn btn-default addBtn" type="button" onclick="addEmails()"><span class="fui-plus"></span></button>');
+    }
+}
 </script>
 <?php endif;?>
 </body>

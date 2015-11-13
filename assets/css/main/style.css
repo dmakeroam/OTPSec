@@ -27,7 +27,7 @@ div.well{
 }
 
 #keepLeft input{
-    width:150%;
+    width:200px;
 }
 
 .navbar-brand-right{
@@ -52,4 +52,8 @@ div.well{
 
 .a_link{
    color:#34495e; 
+}
+
+#submit-option input{
+    width:120px;
 }
