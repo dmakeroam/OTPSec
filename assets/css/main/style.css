@@ -27,7 +27,7 @@ div.well{
 }
 
 #keepLeft input{
-    width:200px;
+    width:250px;
 }
 
 .navbar-brand-right{
@@ -56,4 +56,8 @@ div.well{
 
 #submit-option input{
     width:120px;
+}
+
+#username[readonly], #uniqKey[readonly], #email1[readonly], #email2[readonly], #email3[readonly], #email4[readonly], #email5[readonly]{
+    color:#34495e;
 }

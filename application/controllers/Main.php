@@ -7,14 +7,24 @@ class Main extends CI_Controller{
         $this->load->helper('form');
         $this->load->helper('html');
         $this->load->helper('url');
+        $this->load->model('Users_model');
         $this->load->library('session');
     }
     
     public function index(){
         if($username=$this->session->userdata('username')){
+            
+            $this->Users_model->hasUserName($username);
+            
+            $emails=$this->Users_model->getUserEmail();
+            
+            $uniqKey=$this->Users_model->getOtpKey();
+            
+            $main_page_arg=array('emails'=>$emails,'uniq_key'=>$uniqKey);
             $pageUsername=array('page'=>'member','username'=>$username);
-            $page=array('page'=>'member');
-            $this->loadView('main/main_page',null,$pageUsername,$page);
+            $page=array('page'=>'member','numberOfEmails'=>count($emails));
+            
+            $this->loadView('main/main_page',$main_page_arg,$pageUsername,$page);
         }
         else{
             $page=array('page'=>'login');

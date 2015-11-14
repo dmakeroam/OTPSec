@@ -42,7 +42,15 @@ function login(){
 <?php endif;?>
 <?php if(isset($page) && $page=='member') :?>
 <script language="javascript" type="text/javascript">
+    
+<?php if($numberOfEmails==4) :?>
+var noEmail=5;
+<?php elseif($numberOfEmails==5) :?>
+var noEmail=6;
+<?php else :?>
 var noEmail=4;
+<?php endif;?>
+    
 $(function() {
    $('#edit_btn').click(function(event){
        
@@ -56,49 +64,117 @@ $(function() {
        $('#uniqKey').attr('required','true');
        
        $('#edit_btn').addClass('disabled');
+       $('#edit_btn').attr('disabled','true');
        $('#save_btn').removeClass('disabled');
        
    });
     
-   
+   $('#username').change(function(event){
+        var username=$('#username').val();
+        $.post("/OTPSec/member/hasUsername",
+        {
+          username:username
+        },
+        function(data, status){
+            if(data!=="0"){
+              $('#personalHeader').append('<font style="color:red; font-weight:normal; font-size:15px;" id="err-name"><br>The username is not available.</font>');
+              $('#username').focus();
+              $('#personalGroup').addClass('has-error');
+            }
+            else{
+              $('#err-name').remove();
+              $('#personalGroup').removeClass('has-error');
+            }
+        });
+   });
+    
+   $('#uniqKey').change(function(event){
+        var uniqKey=$('#uniqKey');
+        var uniqKeyVal=uniqKey.val();
+        $.post("/OTPSec/member/hasKey",
+        {
+          uniqKey:uniqKeyVal
+        },
+        function(data, status){
+            if(data!=="0"){
+              $('#'+uniqKey.attr('id')+'-error').css('display','initial');
+              $('#'+uniqKey.attr('id')).focus();
+              $('#'+uniqKey.attr('id')+'-form').addClass('has-error');
+            }
+            else{
+              $('#'+uniqKey.attr('id')+'-error').css('display','none');
+              $('#'+uniqKey.attr('id')+'-form').removeClass('has-error');
+            }
+        });
+   });
+    
 });
     
- function addEmails(){
-     if(noEmail!=6){
-          var inputEmail='<div class="form-group" id="email'+noEmail+'-form">';
-          inputEmail+='<label class="control-label col-md-4" for="email'+noEmail+'" id="label-email'+noEmail+'">'+noEmail+'th Email:</label>';
-          inputEmail+='<div class="col-md-8">';
-          inputEmail+='<div class="input-group">';
-          inputEmail+='<input type="email" class="form-control" id="email'+noEmail+'" name="email'+noEmail+'" placeholder="'+noEmail+'th Email" readonly>';
-          inputEmail+='<span class="input-group-btn">';
-          inputEmail+='<button class="btn btn-default addBtn" type="button" onclick="addEmails()"><span class="fui-plus"></span></button>';
-          inputEmail+='<button class="btn btn-default" type="button" onclick="deleteEmails('+noEmail+')" id="delete-email'+noEmail+'"><span class="fui-cross"></span></button>'
-          inputEmail+='</span>';
-          inputEmail+='</div>';
-          inputEmail+='</div>';
-          inputEmail+='</div>';
-          $('#personalInfo').append(inputEmail);
-          if(noEmail==5){
-            $('button').remove('.addBtn');
-          }
-          noEmail++;
+    
+function hasEmail(email){
+        var emailVal=email.value;
+        $.post("/OTPSec/member/hasEmail",
+        {
+          email:emailVal
+        },
+        function(data, status){
+            if(data!=="0"){
+              $('#'+email.getAttribute('id')+'-error').css('display','initial');
+              $('#'+email.getAttribute('id')).focus();
+              $('#'+email.getAttribute('id')+'-form').addClass('has-error');
+            }
+            else{
+              $('#'+email.getAttribute('id')+'-error').css('display','none');
+              $('#'+email.getAttribute('id')+'-form').removeClass('has-error');
+            }
+        });
+}
+    
+function addEmails(){
+     if($('#edit_btn').attr('disabled')==="disabled"){
+         if(noEmail!=6){
+              var inputEmail='<font style="color:red; font-weight:normal; font-size:15px; display:none;" id="email'+noEmail+'-error">The email is not available</font>';
+              inputEmail+='<div class="form-group" id="email'+noEmail+'-form">';
+              inputEmail+='<label class="control-label col-md-4" for="email'+noEmail+'" id="label-email'+noEmail+'">'+noEmail+'th Email:</label>';
+              inputEmail+='<div class="col-md-8">';
+              inputEmail+='<div class="input-group">';
+              inputEmail+='<input type="email" class="form-control" id="email'+noEmail+'" name="email'+noEmail+'" placeholder="'+noEmail+'th Email" onchange="hasEmail(this)" autocomplete="off">';
+              inputEmail+='<span class="input-group-btn">';
+              inputEmail+='<button class="btn btn-default addBtn" type="button" onclick="addEmails()"><span class="fui-plus"></span></button>';
+              inputEmail+='<button class="btn btn-default" type="button" onclick="deleteEmails('+noEmail+')" id="delete-email'+noEmail+'"><span class="fui-cross"></span></button>'
+              inputEmail+='</span>';
+              inputEmail+='</div>';
+              inputEmail+='</div>';
+              inputEmail+='</div>';
+              $('#personalInfo').append(inputEmail);
+              if(noEmail==5){
+                $('button').remove('.addBtn');
+              }
+              noEmail++;
+         }
      }
-  }
+}
+    
 function deleteEmails(noOfEmail){
-    $('div').remove('#email'+noOfEmail+'-form');
-    if(noEmail==6 && noOfEmail==4){
-      $('#email5-form').attr('id','email4-form');
-      $('#label-email5').attr('for','email4');
-      $('#label-email5').html('4th Email:');
-      $('#label-email5').attr('id','label-email4');
-      $('#email5').attr('placeholder','4th Email');
-      $('#email5').attr('id','email4');
-      $('#delete-email5').attr('onclick','deleteEmails(4)');
-      $('#delete-email5').attr('id','delete-email4');
-    }
-    noEmail--;
-    if(noEmail==5){
-        $('.input-group-btn').prepend('<button class="btn btn-default addBtn" type="button" onclick="addEmails()"><span class="fui-plus"></span></button>');
+    if($('#edit_btn').attr('disabled')==="disabled"){
+        $('div').remove('#email'+noOfEmail+'-form');
+        $('#email'+noOfEmail+'-error').remove();
+        if(noEmail==6 && noOfEmail==4){
+          $('#email5-error').attr('id','email4-error');
+          $('#email5-form').attr('id','email4-form');
+          $('#label-email5').attr('for','email4');
+          $('#label-email5').html('4th Email:');
+          $('#label-email5').attr('id','label-email4');
+          $('#email5').attr('placeholder','4th Email');
+          $('#email5').attr('name','email4');
+          $('#email5').attr('id','email4');
+          $('#delete-email5').attr('onclick','deleteEmails(4)');
+          $('#delete-email5').attr('id','delete-email4');
+        }
+        noEmail--;
+        if(noEmail==5){
+            $('.input-group-btn').prepend('<button class="btn btn-default addBtn" type="button" onclick="addEmails()"><span class="fui-plus"></span></button>');
+        }
     }
 }
 </script>

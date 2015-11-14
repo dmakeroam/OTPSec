@@ -13,6 +13,43 @@ class Users_model extends CI_Model{
         parent::__construct();
     }
     
+    public function hasUsernameNotInclude($username){
+        $current_id=$this->session->userdata('user_id');
+        $query=$this->db->select('OTP_Username')->from('otp_users')
+                                     ->where(array('OTP_Username'=>$username,'OTP_UID !='=>$current_id))->get();
+        if(($num_row=$query->num_rows())>=1){
+            return true;
+        }
+        else{
+           return false; 
+        }
+    }
+    
+    public function hasUniqueKeyNotInclude($uniqKey){
+        $current_id=$this->session->userdata('user_id');
+        $query=$this->db->select('OTP_Key')->from('otp_users')
+                                     ->where(array('OTP_Key'=>$uniqKey,'OTP_UID !='=>$current_id))->get();
+        if(($num_row=$query->num_rows())>=1){
+            return true;
+        }
+        else{
+           return false; 
+        }
+    }
+    
+    public function hasEmailNotInclude($email){
+        $current_id=$this->session->userdata('user_id');
+        $query=$this->db->select('OTP_Emails')
+                        ->from('otp_emails')
+                        ->where(array('OTP_Emails'=>$email,'otp_emails.OTP_UID !='=>$current_id))->get();
+        if(($num_row=$query->num_rows())>=1){
+            return true;
+        }
+        else{
+           return false; 
+        }
+    }
+    
     public function hasUserName($username){
         $query=$this->db->select('*')->from('otp_users')
                                      ->join('otp_emails','otp_users.OTP_UID=otp_emails.OTP_UID')
