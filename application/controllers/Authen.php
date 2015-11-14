@@ -73,21 +73,27 @@ class Authen extends CI_Controller{
      private function generateOTPCodeSegments(){
          $emails=$this->Users_model->getUserEmail();
          $numOfEmails=count($emails);
+
          $otpCode=$this->Users_model->getOtpCode();
          $userName=$this->Users_model->getUserName();
          $segmentPerEmail=(strlen($otpCode)/$numOfEmails);
+
          $otpCode_segments=array();
          $i=0;
          $sentCount=0;
-         for($i;$i<$numOfEmails;$i++){     
-             $start=($i*$segmentPerEmail); 
+         for($i;$i<$numOfEmails;$i++){  
+             
+             $start=($i*$segmentPerEmail);
+             
              $otpCode_segments[$i]=substr($otpCode,$start,$segmentPerEmail);
+             
              if($numOfEmails==3 && $i==2){
                 $otpCode_segments[$i].=substr($otpCode,-1); 
              }
-             else if($numOfEmails=5 && $i==4){
+             else if($numOfEmails==5 && $i==4){
                 $otpCode_segments[$i].=substr($otpCode,-4);  
              }
+             
              $result=$this->email->from('admin@mail.onidev.me','OTPSec Support')
                                 ->to($emails[$i])
                                 ->subject('OTP Code for '.$userName.' access')
