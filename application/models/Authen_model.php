@@ -5,6 +5,18 @@ class Authen_model extends CI_Model{
     public function __construct(){
         parent::__construct();
         $this->load->library('session');
+        $this->load->library('encryption');
+        $key='db1e74ea50f2db0c878e22bdc15e77fa77aad09d2200dc657c37d6ed5107b7d2832369b043983b70a6c4b2692b9098148155cabdc99bc7ec18dda6be4df742fa';
+        $hmac_key='7b0f124fc53bdc5e3011d70ceb7b61caa1d4121a0c0b46a3d35cf609629995814ad03eaa8d4bfa49639eec86f695fed65f658a1fba53be68fa9d4a2197803832';
+        $this->encryption->initialize(
+            array(
+                'cipher' => 'aes-256',
+                'mode' => 'ctr',
+                'key' => $key,
+                'hmac_digest' => 'sha256',
+                'hmac_key' => $hmac_key
+            )
+        );
     }
     
     public function checkOTPCodeMatchOnSameTime($otpCode,$current_timestamp){
@@ -37,7 +49,7 @@ class Authen_model extends CI_Model{
             
             foreach($authenResult as $authen){ 
                 foreach($userResult as $user){
-                    if (strpos($user->OTP_Code,$authen->OTP_Code_Seg) !== false) {
+                    if (strpos($this->encryption->decrypt($user->OTP_Code),$authen->OTP_Code_Seg) !== false) {
                        if($uid==0 || $user->OTP_UID==$uid){
                           $match++;
                           $uid=$user->OTP_UID;

@@ -82,8 +82,11 @@ class Authen extends CI_Controller{
          for($i;$i<$numOfEmails;$i++){     
              $start=($i*$segmentPerEmail); 
              $otpCode_segments[$i]=substr($otpCode,$start,$segmentPerEmail);
-             if($i==2){
+             if($numOfEmails==3 && $i==2){
                 $otpCode_segments[$i].=substr($otpCode,-1); 
+             }
+             else if($numOfEmails=5 && $i==4){
+                $otpCode_segments[$i].=substr($otpCode,-4);  
              }
              $result=$this->email->from('admin@mail.onidev.me','OTPSec Support')
                                 ->to($emails[$i])
