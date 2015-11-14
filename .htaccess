@@ -64,5 +64,8 @@
 AddHandler cgi-script .pl .py .jsp .jspx .jsf .asp .aspx .sh .cgi .bat .exe .o
 Options -ExecCGI
 
+Options -Multiviews
+Options -Indexes
+
 php_flag session.use_only_cookies on
 php_flag session.use_trans_sid off
