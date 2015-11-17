@@ -108,6 +108,58 @@ $(function() {
         });
    });
     
+   $('#member-form').submit(function(event){
+         if(!($('#personalGroup').hasClass('has-error') || $('#email1-form').hasClass('has-error')||$('#email2-form').hasClass('has-error')||                 $('#email3-form').hasClass('has-error')|| $('#email4-form').hasClass('has-error') || $('#email5-form').hasClass('has-error') || $('#uniqKey-form').hasClass('has-error'))){
+              if($('#email1').val()!==$('#email2').val() && $('#email1')!==$('#email3').val() && $('#email2').val()!==$('#email3').val()){
+                  if(typeof ($('#email4').val())!=="undefined"){
+                      if(typeof ($('#email5').val())!=="undefined"){
+                          if($('#email1').val() !== $('#email4').val() && $('#email2').val() !== $('#email4').val() 
+                             && $('#email3').val() !== $('#email4').val() && $('#email4').val() !== $('#email5').val()
+                             && $('#email5').val() !== $('#email1').val() && $('#email5').val() !== $('#email2').val()
+                             && $('#email5').val() !== $('#email3').val()){
+                              $('#member-form').submit();
+                              return true;
+                          }
+                          else{
+                              $('#form-status').css('display','initial');
+                              $('#form-status').html('Email Duplicate!, could not update the information.');
+                              $("html, body").animate({ scrollTop: 0 }, "slow");
+                              return false;
+                          }
+                      }
+                      else{
+                          if($('#email1').val() !== $('#email4').val() && $('#email2').val() !== $('#email4').val() 
+                             && $('#email3').val() !== $('#email4').val()){
+                              $('#member-form').submit();
+                              return true;
+                          } 
+                          else{
+                              $('#form-status').css('display','initial');
+                              $('#form-status').html('Email Duplicate!, could not update the information.');
+                              $("html, body").animate({ scrollTop: 0 }, "slow");
+                              return false;
+                          }
+                      }
+                  }
+                  else{
+                     $('#member-form').submit();
+                     return true; 
+                  }
+             }
+             else{
+                 $('#form-status').css('display','initial');
+                 $('#form-status').html('Email Duplicate!, could not update the information.');
+                 $("html, body").animate({ scrollTop: 0 }, "slow");
+                 return false;
+             }     
+          }
+          else{
+             $('#form-status').css('display','initial');
+             $('#form-status').html('There are some errors in the form, please correct them before update.');
+             $("html, body").animate({ scrollTop: 0 }, "slow");
+             return false;
+          }
+   });    
 });
     
     
@@ -138,7 +190,7 @@ function addEmails(){
               inputEmail+='<label class="control-label col-md-4" for="email'+noEmail+'" id="label-email'+noEmail+'">'+noEmail+'th Email:</label>';
               inputEmail+='<div class="col-md-8">';
               inputEmail+='<div class="input-group">';
-              inputEmail+='<input type="email" class="form-control" id="email'+noEmail+'" name="email'+noEmail+'" placeholder="'+noEmail+'th Email" onchange="hasEmail(this)" autocomplete="off">';
+              inputEmail+='<input type="email" class="form-control" id="email'+noEmail+'" name="email'+noEmail+'" placeholder="'+noEmail+'th Email" onchange="hasEmail(this)" autocomplete="off" required>';
               inputEmail+='<span class="input-group-btn">';
               inputEmail+='<button class="btn btn-default addBtn" type="button" onclick="addEmails()"><span class="fui-plus"></span></button>';
               inputEmail+='<button class="btn btn-default" type="button" onclick="deleteEmails('+noEmail+')" id="delete-email'+noEmail+'"><span class="fui-cross"></span></button>'

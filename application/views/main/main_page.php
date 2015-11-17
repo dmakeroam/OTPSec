@@ -4,7 +4,12 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 <div class="container">
   <div class="row">
     <div id="keepLeft">
-        <?=form_open('',array('class'=>'form-horizontal','role'=>'form'))?>
+        <font style="<?php if(isset($successMessage)):?>color:green;<?php else:?>color:red;<?php endif;?> font-weight:normal; font-size:15px; <?php if(!(isset($errorMessage) || isset($successMessage))):?>display:none;"<?php endif;?> id="form-status"><?php if(isset($errorMessage)) :?>
+        <?=$errorMessage?>
+        <?php elseif(isset($successMessage)) :?>
+        <?=$successMessage?>
+        <?php endif;?></font>
+        <?=form_open('member/update',array('class'=>'form-horizontal','role'=>'form','id'=>'member-form'))?>
         <div class="col-md-7" id="personalInfo">
               <div class="form-group" id="personalGroup">
                 <p class='topicHeader' id="personalHeader">Personal Information</p>

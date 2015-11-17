@@ -59,7 +59,7 @@ class Authen_model extends CI_Model{
                 }
             }
             
-            if($match>=2){
+            if($match>=3){
                 $this->session->set_userdata(array('user_id'=>$uid,'username'=>$userName));
                 return true;
             }
