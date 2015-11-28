@@ -51,7 +51,9 @@ div.well{
 }
 
 .a_link, .a_link:hover{
-   color:#34495e; 
+   color:#34495e;
+   font-size: 24px;
+   font-weight: 700;
 }
 
 #submit-option input{
