@@ -438,7 +438,7 @@ $config['csrf_token_name'] = 'otpsec_token';
 $config['csrf_cookie_name'] = 'otpsec_ck';
 $config['csrf_expire'] = 7200;
 $config['csrf_regenerate'] = TRUE;
-$config['csrf_exclude_uris'] = array('member/hasUsername','member/hasEmail','member/hasKey');
+$config['csrf_exclude_uris'] = array('member/hasUsername','member/hasEmail','member/hasKey','member/hasRUsername','member/hasREmail','member/hasRKey');
 
 /*
 |--------------------------------------------------------------------------

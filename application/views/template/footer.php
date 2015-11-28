@@ -39,8 +39,7 @@ function login(){
     });
 }
 </script>
-<?php endif;?>
-<?php if(isset($page) && $page=='member') :?>
+<?php elseif(isset($page) && $page=='member') :?>
 <script language="javascript" type="text/javascript">
     
 <?php if($numberOfEmails==4) :?>
@@ -229,6 +228,91 @@ function deleteEmails(noOfEmail){
         }
     }
 }
+</script>
+<?php elseif (isset($page) && $page=='regis') :?>
+<script language="javascript" type="text/javascript">
+$(function() {
+    
+   $('#username').change(function(event){
+        var username=$('#username').val();
+        $.post("/OTPSec/member/hasRUsername",
+        {
+          username:username
+        },
+        function(data, status){
+            if(data!=="0"){
+              $('#personalHeader').append('<font style="color:red; font-weight:normal; font-size:15px;" id="err-name"><br>The username is not available.</font>');
+              $('#username').focus();
+              $('#personalGroup').addClass('has-error');
+            }
+            else{
+              $('#err-name').remove();
+              $('#personalGroup').removeClass('has-error');
+            }
+        });
+   });
+    
+   $('#uniqKey').change(function(event){
+        var uniqKey=$('#uniqKey');
+        var uniqKeyVal=uniqKey.val();
+        $.post("/OTPSec/member/hasRKey",
+        {
+          uniqKey:uniqKeyVal
+        },
+        function(data, status){
+            if(data!=="0"){
+              $('#'+uniqKey.attr('id')+'-error').css('display','initial');
+              $('#'+uniqKey.attr('id')).focus();
+              $('#'+uniqKey.attr('id')+'-form').addClass('has-error');
+            }
+            else{
+              $('#'+uniqKey.attr('id')+'-error').css('display','none');
+              $('#'+uniqKey.attr('id')+'-form').removeClass('has-error');
+            }
+        });
+   });
+    
+   $('#member-form').submit(function(event){
+         if(!($('#personalGroup').hasClass('has-error') || $('#email1-form').hasClass('has-error')||$('#email2-form').hasClass('has-error')||                 $('#email3-form').hasClass('has-error') || $('#uniqKey-form').hasClass('has-error'))){
+              if($('#email1').val()!==$('#email2').val() && $('#email1')!==$('#email3').val() && $('#email2').val()!==$('#email3').val()){
+                 $('#member-form').submit();
+                 return true; 
+             }
+             else{
+                 $('#form-status').css('display','initial');
+                 $('#form-status').html('Email Duplicate!, could not apply the form.');
+                 $("html, body").animate({ scrollTop: 0 }, "slow");
+                 return false;
+             }     
+          }
+          else{
+             $('#form-status').css('display','initial');
+             $('#form-status').html('There are some errors in the form, please correct them before apply.');
+             $("html, body").animate({ scrollTop: 0 }, "slow");
+             return false;
+          }
+   });    
+});  
+    
+function hasEmail(email){
+        var emailVal=email.value;
+        $.post("/OTPSec/member/hasREmail",
+        {
+          email:emailVal
+        },
+        function(data, status){
+            if(data!=="0"){
+              $('#'+email.getAttribute('id')+'-error').css('display','initial');
+              $('#'+email.getAttribute('id')).focus();
+              $('#'+email.getAttribute('id')+'-form').addClass('has-error');
+            }
+            else{
+              $('#'+email.getAttribute('id')+'-error').css('display','none');
+              $('#'+email.getAttribute('id')+'-form').removeClass('has-error');
+            }
+        });
+}
+    
 </script>
 <?php endif;?>
 </body>

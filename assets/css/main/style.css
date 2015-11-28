@@ -50,7 +50,7 @@ div.well{
     font-size:11pt;
 }
 
-.a_link{
+.a_link, .a_link:hover{
    color:#34495e; 
 }
 

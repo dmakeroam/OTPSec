@@ -62,6 +62,44 @@ class Users_model extends CI_Model{
         }
     }
     
+    /* ------------------------ Registration --------------------------- */
+    
+    public function hasRUsername($username){
+        $query=$this->db->select('OTP_Username')->from('otp_users')
+                                     ->where('OTP_Username',$username)->get();
+        if(($num_row=$query->num_rows())>=1){
+            return true;
+        }
+        else{
+           return false; 
+        }
+    }
+    
+    public function hasUniqueKey($uniqKey){
+        $query=$this->db->select('OTP_Key')->from('otp_users')
+                                     ->where('OTP_Key',$uniqKey)->get();
+        if(($num_row=$query->num_rows())>=1){
+            return true;
+        }
+        else{
+           return false; 
+        }
+    }
+    
+    public function hasEmail($email){
+        $query=$this->db->select('OTP_Emails')
+                        ->from('otp_emails')
+                        ->where('OTP_Emails',$email)->get();
+        if(($num_row=$query->num_rows())>=1){
+            return true;
+        }
+        else{
+           return false; 
+        }
+    }
+    
+    /* -------------------------- Registration --------------------------------------*/
+    
     public function hasUserName($username){
         $query=$this->db->select('*')->from('otp_users')
                                      ->join('otp_emails','otp_users.OTP_UID=otp_emails.OTP_UID')
@@ -161,6 +199,71 @@ class Users_model extends CI_Model{
         }
         
     }
+    
+    public function canAddMember($username,$email1,$email2,$email3,$uniqKey){
+        
+        $current_timestamp_obj = new DateTime();   
+        $current_timestamp=$current_timestamp_obj->format('Y-m-d h:i:s');
+        
+        $userData=array(
+            'OTP_Username'=>$username,
+            'OTP_Key'=>$uniqKey,
+            'OTP_Expired'=>$current_timestamp
+        );
+        
+        $this->db->insert('otp_users',$userData);
+        
+        if ($this->db->trans_status() === FALSE){
+            
+            $this->db->trans_rollback();
+            return false;
+            
+        }
+        else{
+            
+            $this->db->trans_commit();
+            
+            $OTP_UID=$this->db->select('OTP_UID')->from('otp_users')->where('OTP_Username',$username)->get()
+                     ->result()[0]->OTP_UID;   
+            
+            $emailData=array(            
+               array(
+                  'OTP_UID'=>$OTP_UID,
+                  'OTP_Emails_No'=>1,
+                  'OTP_Emails'=>$email1
+               ),
+               array(
+                  'OTP_UID'=>$OTP_UID,
+                  'OTP_Emails_No'=>2,
+                  'OTP_Emails'=>$email2
+               ),
+               array(
+                  'OTP_UID'=>$OTP_UID,
+                  'OTP_Emails_No'=>3,
+                  'OTP_Emails'=>$email3
+               )   
+            );
+            
+            $this->db->insert_batch('otp_emails',$emailData);
+            
+            if ($this->db->trans_status() === FALSE){
+            
+                $this->db->trans_rollback();
+                return false;
+            
+            }
+            else{
+            
+                $this->db->trans_commit();
+                
+                return true;
+                
+            }
+        }
+        
+    }
+        
+    
     
     public function canUpdate($username,$email1,$email2,$email3,$email4,$email5,$uniqKey){
         

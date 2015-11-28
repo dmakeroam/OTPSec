@@ -8,6 +8,7 @@ class Main extends CI_Controller{
         $this->load->helper('html');
         $this->load->helper('url');
         $this->load->model('Users_model');
+        $this->load->library('form_validation');
         $this->load->library('session');
     }
     
@@ -29,6 +30,19 @@ class Main extends CI_Controller{
         else{
             $page=array('page'=>'login');
             $this->loadView('authen/login_page',null,$page,$page);
+        }
+    }
+    
+    public function registration(){
+        if(!$this->session->userdata('username')){
+            
+            $this->form_validation->run();
+            
+            $page=array('page'=>'regis');
+            $this->loadView('main/regis',null,$page,$page);
+        }
+        else{
+            $this->index();
         }
     }
     

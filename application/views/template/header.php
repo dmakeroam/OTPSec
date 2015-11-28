@@ -5,7 +5,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 <html lang='en'>
 <head>
 <title>
-<?php if(isset($page) && $page==='member') :?>OTPSec Member<?php else:?>OTPSec Authentication<?php endif;?>
+<?php if(isset($page) && $page==='member') :?>OTPSec Member<?php else:?><?php if(isset($page) && $page==='regis'):?>OTPSec Registration<?php else:?>OTPSec Authentication<?php endif;?><?php endif;?>
 </title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta charset="utf-8"/>
@@ -15,13 +15,14 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 <?php endif;?>
 <?=link_tag('assets/css/main/style.css')?>
 <?=link_tag('https://cdnjs.cloudflare.com/ajax/libs/flat-ui/2.2.2/css/flat-ui.min.css')?>
+<script src='https://www.google.com/recaptcha/api.js'></script>
 </head>
 <body>
 <div class="navbar navbar-fixed-top navbar-default">
     <div class="navbar-inner">
         <div class="container">
         <nav class='navbar-brand'>
-            <a href='<?=base_url('')?>' class='a_link'><?php if(isset($page) && $page==='member') :?>OTPSec Member<?php else:?>OTPSec Authentication<?php endif;?></a>
+            <a href='<?=base_url('')?>' class='a_link'><?php if(isset($page) && $page==='member') :?>OTPSec Member<?php else:?><?php if(isset($page) && $page==='regis'):?>OTPSec Registration<?php else:?>OTPSec Authentication<?php endif;?><?php endif;?></a>
         </nav>
         <?php if(isset($page) && $page==='member') :?>
         <nav class='navbar-brand-right'>

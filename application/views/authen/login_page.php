@@ -13,7 +13,8 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
           <div class="form-group">
             <button type="submit" id="login_btn" class="btn btn-def btn-block">Login</button>        
           </div>
-         <?=form_close()?>    
+         <?=form_close()?>  
+          <p style='text-align:center;'><?=anchor('main/registration','Don\'t have any accounts?','style="color:#34495e;"')?></p>
       </div> 
     </div> 
   </div>
