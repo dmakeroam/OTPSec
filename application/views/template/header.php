@@ -15,7 +15,9 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 <?php endif;?>
 <?=link_tag('assets/css/main/style.css')?>
 <?=link_tag('https://cdnjs.cloudflare.com/ajax/libs/flat-ui/2.2.2/css/flat-ui.min.css')?>
-<?=script_tag('https://www.google.com/recaptcha/api.js')?>
+<?php if(isset($page) && $page==='regis') :?>
+<?=script_tag('https://www.google.com/recaptcha/api.js')?>   
+<?php endif;?>
 </head>
 <body>
 <div class="navbar navbar-fixed-top navbar-default">
@@ -26,7 +28,7 @@ if ( ! defined('BASEPATH')) exit('No direct script access allowed');
         </nav>
         <nav class='navbar-brand-right'>   
         <?php if(isset($page) && $page==='member') :?>
-        Hi, <?=$username?>!
+        <?=$username?>, <?=anchor('member/logout','Logout','class="c_link"')?> 
         <?php elseif (isset($page) && $page!=='login') :?>
         <?=anchor('main','Login','class="a_link"')?> 
         <?php endif;?>

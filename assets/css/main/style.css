@@ -56,6 +56,10 @@ div.well{
    font-weight: 700;
 }
 
+.c_link, .c_link:hover{
+    color:#34495e;
+}
+
 #submit-option input{
     width:120px;
 }

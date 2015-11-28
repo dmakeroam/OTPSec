@@ -12,6 +12,14 @@ class Member extends CI_Controller{
         $this->load->helper('url');
     }
     
+    public function logout(){
+        
+        $this->session->sess_destroy();
+        
+        redirect('main','refresh');
+        
+    }
+    
     public function add(){
         if(!$this->session->userdata('username')){ 
             
