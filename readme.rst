@@ -1,69 +1,11 @@
-###################
-What is CodeIgniter
-###################
+##### One Time Password with Segmentation Support in the Most Confidential System (OTPSec) ##### 
 
-CodeIgniter is an Application Development Framework - a toolkit - for people
-who build web sites using PHP. Its goal is to enable you to develop projects
-much faster than you could if you were writing code from scratch, by providing
-a rich set of libraries for commonly needed tasks, as well as a simple
-interface and logical structure to access these libraries. CodeIgniter lets
-you creatively focus on your project by minimizing the amount of code needed
-for a given task.
+##### Introduction ##### 
 
-*******************
-Release Information
-*******************
+One Time Password (OTP) is a password that valid for only one time login session or transaction, on computers or other devices. The most important advantage that is addressed by OTP is that, in contrast to static passwords, they are not vulnerable to replay attacks. The OTP service that I will implement is the OTP with segmentation support or OTPSec. OTPSec is the One Time Password service that send the OTP code to user emails by segmentation. For example, you would like to login to your system. The OTPSec will divide the OTP code into many parts depending on the emails that you have set in the service, and send each of code parts to those emails. What the important in this service that is different from any other OTP services is if you would like to login to the system with this service, you must have at least 2 reliable friends depending on the emails that you will set, then they need enter the part of OTP code in their emails in the OTP field of the system simultaneously to access the system. 
 
-This repo contains in-development code for future releases. To download the
-latest stable release please visit the `CodeIgniter Downloads
-<http://www.codeigniter.com/download>`_ page.
+##### Objectives ##### 
 
-**************************
-Changelog and New Features
-**************************
+- To implement a new OTP Service that is high security for the most confidential system such as the database system for ministry of defense or government. 
 
-You can find a list of all changes for each release in the `user
-guide change log <https://github.com/bcit-ci/CodeIgniter/blob/develop/user_guide_src/source/changelog.rst>`_.
-
-*******************
-Server Requirements
-*******************
-
-PHP version 5.4 or newer is recommended.
-
-It should work on 5.2.4 as well, but we strongly advise you NOT to run
-such old versions of PHP, because of potential security and performance
-issues, as well as missing features.
-
-************
-Installation
-************
-
-Please see the `installation section <http://www.codeigniter.com/user_guide/installation/index.html>`_
-of the CodeIgniter User Guide.
-
-*******
-License
-*******
-
-Please see the `license
-agreement <https://github.com/bcit-ci/CodeIgniter/blob/develop/user_guide_src/source/license.rst>`_.
-
-*********
-Resources
-*********
-
--  `User Guide <http://www.codeigniter.com/docs>`_
--  `Language File Translations <https://github.com/bcit-ci/codeigniter3-translations>`_
--  `Community Forums <http://forum.codeigniter.com/>`_
--  `Community Wiki <https://github.com/bcit-ci/CodeIgniter/wiki>`_
--  `Community IRC <http://www.codeigniter.com/irc>`_
-
-Report security issues to our `Security Panel <mailto:security@codeigniter.com>`_, thank you.
-
-***************
-Acknowledgement
-***************
-
-The CodeIgniter team would like to thank EllisLab, all the
-contributors to the CodeIgniter project and you, the CodeIgniter user.
+- To study how OTP works in the cryptography system.
