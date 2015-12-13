@@ -1,4 +1,4 @@
-One Time Password with Segmentation Support in the Most Confidential System (OTPSec)
+One Time Password with Segmentation Support for the Most Confidential System (OTPSec)
 
 ##### Introduction ##### 
 
